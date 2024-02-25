@@ -1,0 +1,52 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Bot Response</title>
+  </head>
+  <body>
+    <h1>Chat Bot Response</h1>
+    <form id="chat-form">
+      <input
+        type="text"
+        id="user-input"
+        name="message"
+        placeholder="Type your question here"
+      />
+      <button type="submit">Send</button>
+    </form>
+    <div id="bot-response">
+      <!-- Aquí se mostrará la respuesta del bot -->
+    </div>
+
+    <script>
+      // Función para enviar una solicitud POST al servidor
+      async function sendMessage(event) {
+        event.preventDefault(); // Evitar que se envíe el formulario de forma predeterminada
+
+        const userInput = document.getElementById("user-input").value;
+        try {
+          const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ message: userInput }),
+          });
+          const data = await response.text();
+          document.getElementById("bot-response").innerText = data;
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      // Escuchar el evento submit del formulario y llamar a la función sendMessage
+      document
+        .getElementById("chat-form")
+        .addEventListener("submit", sendMessage);
+    </script>
+  </body>
+</html>
